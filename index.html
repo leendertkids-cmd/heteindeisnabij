@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Aftellen naar het Pensioen!</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding-top: 50px; }
+        .clock { font-size: 3rem; font-weight: bold; color: #2c3e50; }
+        .label { font-size: 1.2rem; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+    <h1>Tijd tot het pensioen van onze Directeur 🥂</h1>
+    <div id="countdown" class="clock">Laden...</div>
+    <p class="label">1 april 2027</p>
+
+    <script>
+        const targetDate = new Date("April 1, 2027 17:00:00").getTime();
+
+        setInterval(function() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerHTML = days + "d " + hours + "u " + minutes + "m " + seconds + "s ";
+        }, 1000);
+    </script>
+</body>
+</html>
