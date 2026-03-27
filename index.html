@@ -2,32 +2,106 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Aftellen naar het Pensioen!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pensioen Countdown</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding-top: 50px; }
-        .clock { font-size: 3rem; font-weight: bold; color: #2c3e50; }
-        .label { font-size: 1.2rem; color: #7f8c8d; }
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .bg-image {
+            /* Hier wordt jouw foto geladen */
+            background-image: url("PHOTO-2026-03-27-14-44-41.jpg");
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .overlay {
+            background-color: rgba(0,0,0, 0.5); /* Donkere waas over foto voor leesbaarheid */
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        h1 { margin-bottom: 10px; font-size: 2rem; }
+        
+        .timer {
+            font-size: 3.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin: 20px 0;
+            color: #f1c40f; /* Goudgele kleur */
+        }
+
+        .subtext { font-size: 1.2rem; opacity: 0.8; }
     </style>
 </head>
 <body>
-    <h1>Tijd tot het pensioen van onze Directeur 🥂</h1>
-    <div id="countdown" class="clock">Laden...</div>
-    <p class="label">1 april 2027</p>
 
-    <script>
-        const targetDate = new Date("April 1, 2027 17:00:00").getTime();
+<div class="bg-image">
+    <div class="overlay">
+        <h1>Nog even geduld...</h1>
+        <p class="subtext">Tot het welverdiende pensioen van onze directeur!</p>
+        <div id="timer" class="timer">Berekenen...</div>
+        <p class="subtext">D-day: 1 april 2027</p>
+    </div>
+</div>
 
-        setInterval(function() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
+<script>
+    // Stel de datum in
+    const countDownDate = new Date("April 1, 2027 17:00:00").getTime();
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    const x = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = countDownDate - now;
 
-            document.getElementById("countdown").innerHTML = days + "d " + hours + "u " + minutes + "m " + seconds + "s ";
-        }, 1000);
-    </script>
+        // Berekeningen voor dagen, uren, minuten en seconden
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Toon het resultaat
+        document.getElementById("timer").innerHTML = days + "d " + hours + "u " + minutes + "m " + seconds + "s ";
+
+        // Als de datum bereikt is
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("timer").innerHTML = "HOERA! MET PENSIOEN!";
+            launchConfetti();
+        }
+    }, 1000);
+
+    function launchConfetti() {
+        var duration = 15 * 1000;
+        var animationEnd = Date.now() + duration;
+        var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+        function randomInRange(min, max) {
+          return Math.random() * (max - min) + min;
+        }
+
+        var interval = setInterval(function() {
+          var timeLeft = animationEnd - Date.now();
+          if (timeLeft <= 0) { return clearInterval(interval); }
+          var particleCount = 50 * (timeLeft / duration);
+          confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+          confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+        }, 250);
+    }
+</script>
+
 </body>
 </html>
